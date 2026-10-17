@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/encryptET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20sp"
+        android:layout_marginTop="100sp"
+        android:layout_marginEnd="20sp"
+        android:hint="Hey! type here to get cipher" />
+
+    <EditText
+        android:id="@+id/decryptET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/encryptET"
+        android:layout_margin="20sp"
+        android:hint="paste cipher code here .." />
+
+    <Button
+        android:id="@+id/encryptBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/decryptET"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20sp"
+        android:text="GET CIPHER" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/encryptBtn"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/decryptBtn"
+        android:text="Decrypt"/>
+
+</RelativeLayout>
