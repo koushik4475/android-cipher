@@ -1,6 +1,9 @@
 <div align="center">
 
-# 🔐 Android Cipher
+# Android Cipher | Android Text Encryption and Decryption App in Java
+
+Android Cipher is an Android application that demonstrates text encryption and decryption with the Blowfish cryptographic algorithm. The project is a learning-oriented example of building a native Android interface around cryptographic operations, with screenshots, architecture notes, and Android Studio setup instructions. Blowfish has a 64-bit block size and is a legacy cipher; do not use this demo to protect new sensitive data or as a substitute for a modern, reviewed security design.
+
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=00D9FF&center=true&vCenter=true&width=940&lines=Military-Grade+Encryption+for+Android;8-Level+Blowfish+Security+System;Encrypt+Text+%26+Passwords+Securely" alt="Typing SVG" />
 
@@ -10,7 +13,7 @@
 [![Blowfish](https://img.shields.io/badge/Algorithm-Blowfish-blue.svg)](https://en.wikipedia.org/wiki/Blowfish_(cipher))
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-### 🛡️ *Your Digital Vault for Unbreakable Security*
+### 🛡️ *Your Digital Vault for educational encryption demo*
 
 </div>
 
@@ -18,7 +21,7 @@
 
 ## 🌟 Project Overview
 
-**Android Cipher** is a cutting-edge encryption application developed as a mini project at **University of Mysore, School of Engineering**. This powerful tool implements an **8-level cascading encryption system** using the robust **Blowfish algorithm**, providing military-grade security for your sensitive text and passwords.
+**Android Cipher** is a cutting-edge encryption application developed as a mini project at **University of Mysore, School of Engineering**. This powerful tool implements an **8-level cascading encryption system** using the robust **Blowfish algorithm**, providing legacy-cipher demonstration for your sensitive text and passwords.
 
 <div align="center">
 
