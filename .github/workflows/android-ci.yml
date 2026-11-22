@@ -2,7 +2,7 @@ name: Android Cipher CI
 
 on:
   push:
-    branches: [main, "upgrade/**"]
+    branches: [main, "release/**", "upgrade/**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -11,40 +11,82 @@ permissions:
   contents: read
 
 concurrency:
-  group: android-ci-${{ github.ref }}
+  group: android-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build-and-test:
-    name: Build and unit tests
+    name: Unit tests, lint and release variants
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
 
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         with:
           packages: platform-tools
 
       - name: Install Android 36 SDK
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Run tests, lint and assemble debug/release APKs
-        run: bash gradlew --no-daemon clean testDebugUnitTest lintDebug assembleDebug assembleRelease
+      - name: Run unit tests, lint and assemble installable build variants
+        run: bash gradlew --no-daemon clean testDebugUnitTest lintDebug assembleDebug assembleRelease bundleRelease
 
-      - name: Upload debug and release APKs
-        uses: actions/upload-artifact@v4
+      - name: Upload APK and App Bundle build outputs
+        uses: actions/upload-artifact@v7
         with:
-          name: android-cipher-apks
-          path: app/build/outputs/apk/**/*.apk
+          name: android-cipher-2.2.0-builds
+          path: |
+            app/build/outputs/apk/**/*.apk
+            app/build/outputs/bundle/**/*.aab
           if-no-files-found: error
+          retention-days: 30
+
+  emulator-smoke-tests:
+    name: Emulator UI tests (API ${{ matrix.api-level }})
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [26, 36]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: platform-tools
+
+      - name: Run Espresso tests on Android API ${{ matrix.api-level }}
+        uses: ReactiveCircus/android-emulator-runner@v2.38.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: bash gradlew --no-daemon connectedDebugAndroidTest

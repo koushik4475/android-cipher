@@ -76,6 +76,22 @@ public class CryptoManagerTest {
         CryptoManager.encrypt("secret", "short".toCharArray());
     }
 
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsPlaintextLargerThanOneMiB() throws Exception {
+        CryptoManager.encrypt("a".repeat(CryptoManager.MAX_TEXT_BYTES + 1), PASSWORD);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsUtf8PayloadLargerThanOneMiB() throws Exception {
+        CryptoManager.encrypt("界".repeat(400_000), PASSWORD);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsOversizedEnvelopeBeforeBase64Decoding() throws Exception {
+        CryptoManager.decrypt("AC2:" + "A".repeat(1_500_000), PASSWORD);
+    }
+
     private static String createLegacyVersionOneMessage(String plaintext)
             throws Exception {
         byte[] salt = new byte[16];

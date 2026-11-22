@@ -34,6 +34,11 @@ public final class CryptoManager {
     private static final int TAG_LENGTH_BITS = 128;
     private static final int MIN_PASSWORD_LENGTH = 12;
     private static final int MAX_PASSWORD_LENGTH = 1024;
+    public static final int MAX_TEXT_BYTES = 1_048_576;
+    private static final int MAX_PAYLOAD_BYTES = 1 + SALT_LENGTH + NONCE_LENGTH
+            + MAX_TEXT_BYTES + (TAG_LENGTH_BITS / 8);
+    private static final int MAX_ENVELOPE_CHARS = PREFIX.length()
+            + ((MAX_PAYLOAD_BYTES * 4 + 2) / 3);
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
@@ -44,11 +49,19 @@ public final class CryptoManager {
         if (plaintext == null || plaintext.isEmpty()) {
             throw new IllegalArgumentException("Enter text to encrypt.");
         }
+        if (plaintext.length() > MAX_TEXT_BYTES) {
+            throw new IllegalArgumentException("Text must be 1 MiB or smaller.");
+        }
         validatePassword(password, true);
+
+        byte[] plaintextBytes = plaintext.getBytes(StandardCharsets.UTF_8);
+        if (plaintextBytes.length > MAX_TEXT_BYTES) {
+            Arrays.fill(plaintextBytes, (byte) 0);
+            throw new IllegalArgumentException("Text must be 1 MiB or smaller when encoded as UTF-8.");
+        }
 
         byte[] salt = new byte[SALT_LENGTH];
         byte[] nonce = new byte[NONCE_LENGTH];
-        byte[] plaintextBytes = plaintext.getBytes(StandardCharsets.UTF_8);
         byte[] derivedKey = null;
         byte[] ciphertext = null;
 
@@ -87,13 +100,23 @@ public final class CryptoManager {
             throw new IllegalArgumentException(
                     "This is not an Android Cipher encrypted message.");
         }
+        if (encryptedText.length() > MAX_ENVELOPE_CHARS) {
+            throw new IllegalArgumentException("Encrypted text exceeds the 1 MiB message limit.");
+        }
         validatePassword(password, false);
 
         final byte[] payload;
         try {
-            payload = Base64.getUrlDecoder()
-                    .decode(encryptedText.substring(PREFIX.length()).trim());
+            String encodedPayload = encryptedText.substring(PREFIX.length()).trim();
+            if (encodedPayload.length() > MAX_ENVELOPE_CHARS - PREFIX.length()) {
+                throw new IllegalArgumentException("Encrypted text exceeds the 1 MiB message limit.");
+            }
+            payload = Base64.getUrlDecoder().decode(encodedPayload);
         } catch (IllegalArgumentException exception) {
+            if (exception.getMessage() != null
+                    && exception.getMessage().contains("1 MiB")) {
+                throw exception;
+            }
             throw new IllegalArgumentException("The encrypted text is malformed.", exception);
         }
 
@@ -101,6 +124,10 @@ public final class CryptoManager {
         if (payload.length < minimumLength) {
             Arrays.fill(payload, (byte) 0);
             throw new IllegalArgumentException("The encrypted text is incomplete.");
+        }
+        if (payload.length > MAX_PAYLOAD_BYTES) {
+            Arrays.fill(payload, (byte) 0);
+            throw new IllegalArgumentException("Encrypted text exceeds the 1 MiB message limit.");
         }
 
         byte[] salt = new byte[SALT_LENGTH];
@@ -133,6 +160,9 @@ public final class CryptoManager {
                     new GCMParameterSpec(TAG_LENGTH_BITS, nonce));
             cipher.updateAAD(associatedData(version));
             plaintextBytes = cipher.doFinal(ciphertext);
+            if (plaintextBytes.length > MAX_TEXT_BYTES) {
+                throw new IllegalArgumentException("Decrypted text exceeds the 1 MiB message limit.");
+            }
             return new String(plaintextBytes, StandardCharsets.UTF_8);
         } finally {
             Arrays.fill(payload, (byte) 0);

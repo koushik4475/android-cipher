@@ -1,5 +1,0 @@
-<resources>
-    <style name="Theme.EncryptionDecryption" parent="Theme.EncryptionDecryption.Base">
-        <item name="android:windowLightNavigationBar">false</item>
-    </style>
-</resources>

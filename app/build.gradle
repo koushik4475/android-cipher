@@ -10,10 +10,22 @@ android {
         applicationId "com.example.encryptiondecryption"
         minSdk 26
         targetSdk 36
-        versionCode 3
-        versionName "2.1.0"
+        versionCode 4
+        versionName "2.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            def keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+            if (keystorePath != null && !keystorePath.isBlank()) {
+                storeFile file(keystorePath)
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -24,6 +36,10 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
+            if (System.getenv("ANDROID_KEYSTORE_PATH") != null
+                    && !System.getenv("ANDROID_KEYSTORE_PATH").isBlank()) {
+                signingConfig signingConfigs.release
+            }
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,13 +51,20 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = false
+        animationsDisabled = true
+    }
+
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
     }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.8.0'
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.core:core:1.17.0'
+    implementation 'androidx.core:core-splashscreen:1.2.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'

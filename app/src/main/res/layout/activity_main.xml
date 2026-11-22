@@ -82,7 +82,7 @@
             android:layout_marginTop="26dp"
             android:text="@string/hero_title"
             android:textColor="?attr/colorOnBackground"
-            android:textSize="29sp"
+            android:textSize="30sp"
             android:fontFamily="sans"
             android:letterSpacing="-0.02"
             android:textStyle="bold" />
@@ -168,7 +168,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pasteButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:minWidth="48dp"
@@ -249,6 +249,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword|textNoSuggestions"
                         android:imeOptions="actionDone"
+                        android:privateImeOptions="noPersonalizedLearning"
                         android:singleLine="true"
                         android:saveEnabled="false"
                         android:importantForAutofill="no"
@@ -274,9 +275,9 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/encryptButton"
-                        style="@style/Widget.MaterialComponents.Button"
+                        style="@style/Widget.Material3.Button"
                         android:layout_width="0dp"
-                        android:layout_height="54dp"
+                        android:layout_height="56dp"
                         android:layout_marginEnd="6dp"
                         android:layout_weight="1"
                         android:text="@string/encrypt"
@@ -289,7 +290,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/decryptButton"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="54dp"
                         android:layout_marginStart="6dp"
@@ -360,12 +361,12 @@
                     android:background="@null"
                     android:gravity="top|start"
                     android:hint="@string/output_hint"
-                    android:inputType="textMultiLine|textNoSuggestions"
                     android:minHeight="104dp"
                     android:saveEnabled="false"
                     android:textColor="?attr/colorOnSurface"
                     android:textColorHint="@color/text_secondary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:accessibilityLiveRegion="polite" />
 
                 <View
                     android:layout_width="match_parent"
@@ -381,7 +382,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/copyButton"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:enabled="false"
@@ -393,7 +394,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/shareButton"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:enabled="false"
@@ -408,7 +409,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/clearButton"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:text="@string/clear"

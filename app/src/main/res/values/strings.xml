@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Android Cipher</string>
     <string name="brand_eyebrow">PRIVATE BY DESIGN</string>
-    <string name="version_badge">v2.1</string>
+    <string name="version_badge">v2.2</string>
     <string name="home_title">Android Cipher</string>
     <string name="hero_title">Your words. Your privacy.</string>
-    <string name="home_subtitle">Encrypt and decrypt text locally. Your password never leaves this device.</string>
+    <string name="home_subtitle">Private text encryption that runs entirely on this device — no account or network connection required.</string>
     <string name="security_title">Authenticated encryption</string>
     <string name="security_subtitle">AES-256-GCM · Random salt and nonce · Offline</string>
     <string name="section_message">Message</string>
@@ -22,8 +22,8 @@
     <string name="copy_output">Copy</string>
     <string name="share_output">Share</string>
     <string name="clear">Clear all</string>
-    <string name="privacy_note">Everything is processed on this device. Your text and password are never uploaded by Android Cipher.</string>
-    <string name="footer">ANDROID CIPHER 2.1 · OFFLINE TEXT ENCRYPTION</string>
+    <string name="privacy_note">Everything is processed on this device. Messages are limited to 1 MiB. Your text and password are never uploaded by Android Cipher.</string>
+    <string name="footer">ANDROID CIPHER 2.2 · OFFLINE TEXT ENCRYPTION</string>
     <string name="status_ready">READY</string>
     <string name="status_error">ERROR</string>
     <string name="status_encrypting">ENCRYPTING…</string>
