@@ -2,6 +2,8 @@ package com.example.encryptiondecryption;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ClipDescription;
+import android.os.Build;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         processingIndicator = findViewById(R.id.processingIndicator);
 
         applySystemBarInsets();
+        applyContentMaxWidth();
         bindActions();
         updateCharacterCount();
     }
@@ -91,6 +95,21 @@ public class MainActivity extends AppCompatActivity {
             return windowInsets;
         });
         ViewCompat.requestApplyInsets(rootView);
+    }
+
+    private void applyContentMaxWidth() {
+        rootView.addOnLayoutChangeListener((view, left, top, right, bottom,
+                oldLeft, oldTop, oldRight, oldBottom) -> {
+            View content = ((ViewGroup) rootView).getChildAt(0);
+            int maxWidth = (int) (760 * getResources().getDisplayMetrics().density);
+            int availableWidth = right - left;
+            int targetWidth = Math.min(availableWidth, maxWidth);
+            ViewGroup.LayoutParams params = content.getLayoutParams();
+            if (params.width != targetWidth) {
+                params.width = targetWidth;
+                content.setLayoutParams(params);
+            }
+        });
     }
 
     private void bindActions() {
@@ -217,6 +236,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         ClipData clip = ClipData.newPlainText(getString(R.string.clip_label), value);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            clip.getDescription().getExtras().putBoolean(
+                    ClipDescription.EXTRA_IS_SENSITIVE, true);
+        }
         clipboard.setPrimaryClip(clip);
         showMessage(getString(R.string.message_copied));
     }
