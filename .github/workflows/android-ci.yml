@@ -5,6 +5,7 @@ on:
     branches: [main, "upgrade/**"]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -38,12 +39,12 @@ jobs:
       - name: Install Android 36 SDK
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Run unit tests and assemble debug APK
-        run: bash gradlew --no-daemon clean testDebugUnitTest assembleDebug
+      - name: Run tests, lint and assemble debug/release APKs
+        run: bash gradlew --no-daemon clean testDebugUnitTest lintDebug assembleDebug assembleRelease
 
-      - name: Upload debug APK
+      - name: Upload debug and release APKs
         uses: actions/upload-artifact@v4
         with:
-          name: android-cipher-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: android-cipher-apks
+          path: app/build/outputs/apk/**/*.apk
           if-no-files-found: error
