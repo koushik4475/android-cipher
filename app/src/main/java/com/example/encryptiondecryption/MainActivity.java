@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         copyButton.setEnabled(false);
         shareButton.setEnabled(false);
         setProcessing(true);
+        statusText.setTextColor(getColor(R.color.accent));
         statusText.setText(encrypt ? R.string.status_encrypting : R.string.status_decrypting);
         hideKeyboard();
 
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     statusText.setText(R.string.status_error);
+                    statusText.setTextColor(getColor(R.color.status_error));
                     setProcessing(false);
                     showMessage(encrypt
                             ? getString(R.string.error_encrypt)
@@ -283,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
         copyButton.setEnabled(false);
         shareButton.setEnabled(false);
         statusText.setText(R.string.status_ready);
+        statusText.setTextColor(getColor(R.color.accent));
         inputText.requestFocus();
         showMessage(getString(R.string.message_cleared));
     }
