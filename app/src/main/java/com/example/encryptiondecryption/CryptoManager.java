@@ -1,12 +1,11 @@
 package com.example.encryptiondecryption;
 
-import android.util.Base64;
-
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
@@ -69,8 +68,7 @@ public final class CryptoManager {
             payload.put(nonce);
             payload.put(ciphertext);
 
-            return PREFIX + Base64.encodeToString(payload.array(),
-                    Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+            return PREFIX + Base64.getUrlEncoder().withoutPadding().encodeToString(payload.array());
         } finally {
             Arrays.fill(plaintextBytes, (byte) 0);
             if (derivedKey != null) Arrays.fill(derivedKey, (byte) 0);
@@ -91,8 +89,7 @@ public final class CryptoManager {
 
         final byte[] payload;
         try {
-            payload = Base64.decode(encryptedText.substring(PREFIX.length()).trim(),
-                    Base64.URL_SAFE | Base64.NO_WRAP);
+            payload = Base64.getUrlDecoder().decode(encryptedText.substring(PREFIX.length()).trim());
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException("The encrypted text is malformed.", exception);
         }
