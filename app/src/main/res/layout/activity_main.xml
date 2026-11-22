@@ -356,8 +356,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:focusable="true"
-                    android:longClickable="true"
                     android:gravity="top|start"
                     android:hint="@string/output_hint"
                     android:inputType="textMultiLine|textNoSuggestions"
@@ -365,7 +363,6 @@
                     android:saveEnabled="false"
                     android:textColor="?attr/colorOnSurface"
                     android:textColorHint="@color/text_secondary"
-                    android:textIsSelectable="true"
                     android:textSize="14sp" />
 
                 <View
