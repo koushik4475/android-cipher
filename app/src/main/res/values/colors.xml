@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="screen_background">#F4F7FB</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#172B3A</color>
     <color name="accent">#087F75</color>
     <color name="button_text">#FFFFFF</color>
     <color name="security_card">#E5F5F1</color>
