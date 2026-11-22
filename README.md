@@ -22,7 +22,7 @@ A lightweight, offline-first Android text encryption app built with Java and Mat
 - JDK 17.
 - Gradle 8.13 (wrapper).
 - Android SDK 36.
-- Minimum Android version: API 23.
+- Minimum Android version: API 26.
 - Java source compatibility: Java 17.
 
 ## Build
