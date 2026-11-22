@@ -31,6 +31,7 @@
                 android:background="@drawable/bg_security_icon"
                 android:gravity="center"
                 android:text="AC"
+                android:importantForAccessibility="no"
                 android:textColor="@color/accent"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -118,6 +119,7 @@
                     android:background="@drawable/bg_security_icon"
                     android:gravity="center"
                     android:text="✓"
+                    android:importantForAccessibility="no"
                     android:textColor="@color/accent"
                     android:textSize="20sp"
                     android:textStyle="bold" />
