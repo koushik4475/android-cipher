@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         rootView.addOnLayoutChangeListener((view, left, top, right, bottom,
                 oldLeft, oldTop, oldRight, oldBottom) -> {
             View content = ((ViewGroup) rootView).getChildAt(0);
-            int maxWidth = (int) (760 * getResources().getDisplayMetrics().density);
+            int maxWidth = (int) (560 * getResources().getDisplayMetrics().density);
             int availableWidth = right - left;
             int targetWidth = Math.min(availableWidth, maxWidth);
             ViewGroup.LayoutParams params = content.getLayoutParams();
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     copyButton.setEnabled(false);
                     shareButton.setEnabled(false);
                     statusText.setText(R.string.status_ready);
+                    statusText.setTextColor(getColor(R.color.accent));
                 }
             }
             @Override public void afterTextChanged(Editable editable) { }
@@ -194,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     statusText.setText(R.string.status_error);
+                    statusText.setTextColor(getColor(R.color.status_error));
                     setProcessing(false);
                     showMessage(exception.getMessage() == null
                             ? getString(R.string.error_generic) : exception.getMessage());
