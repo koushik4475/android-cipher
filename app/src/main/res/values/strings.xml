@@ -10,6 +10,7 @@
     <string name="section_message">Message</string>
     <string name="input_hint">Type or paste the text you want to protect</string>
     <string name="paste">Paste</string>
+    <string name="paste_description">Paste text from the clipboard into the message field</string>
     <string name="password_hint">Encryption password</string>
     <string name="password_helper">Use 12 or more characters. Keep it safe — it cannot be recovered.</string>
     <string name="encrypt">Encrypt</string>
@@ -45,5 +46,5 @@
     <string name="message_copied">Result copied to clipboard.</string>
     <string name="message_cleared">All fields cleared.</string>
     <string name="clip_label">Android Cipher result</string>
-    <string name="share_chooser_title">Share encrypted text</string>
+    <string name="share_chooser_title">Share result</string>
 </resources>
