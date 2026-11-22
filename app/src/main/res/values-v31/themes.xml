@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.EncryptionDecryption" parent="Theme.EncryptionDecryption">
+        <item name="android:windowSplashScreenBackground">@color/screen_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>
