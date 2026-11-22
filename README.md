@@ -8,7 +8,7 @@ A lightweight, offline-first Android text encryption app built with Java and Mat
 
 - Password-based AES-256-GCM authenticated encryption.
 - Fresh 128-bit random salt and 96-bit nonce for every encryption.
-- PBKDF2-HMAC-SHA-256 key derivation (210,000 iterations).
+- PBKDF2-HMAC-SHA-256 key derivation (600,000 iterations for new messages).
 - Versioned, URL-safe Base64 text envelope with authentication.
 - Detects wrong passwords and modified ciphertext.
 - Runs locally; no network permission or account required.
@@ -82,9 +82,9 @@ The original app used Blowfish-CBC with a hardcoded key and fixed IV. That desig
 
 - The app requests no internet permission and does not upload message contents.
 - The encryption password is required for every operation and is not saved by the app.
-- Clipboard contents may be visible to other apps or system clipboard history. Only copy sensitive output when necessary and clear it from the clipboard yourself.
+- Clipboard contents may be visible to other apps or system clipboard history. Android Cipher marks copied content as sensitive on Android 13+, but only copy sensitive output when necessary.
 - The password-based format is portable: the same password can decrypt the message on another compatible device.
-- This first upgrade focuses on text. File encryption, secure vault storage, biometric unlock, and encrypted history are not implemented yet.
+- This release focuses on text. File encryption, secure vault storage, biometric unlock, and encrypted history are not implemented.
 - Cryptographic code should receive independent security review before being used for high-value or regulated data.
 
 ## License
