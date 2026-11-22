@@ -1,8 +1,8 @@
-# Android Cipher 2.0
+# Android Cipher 2.1
 
 A lightweight, offline-first Android text encryption app built with Java and Material Components.
 
-> **Security note:** Android Cipher 2.0 uses password-based AES-256-GCM for new messages. It is a small utility project, not a professionally audited password manager, secure messenger, or substitute for a reviewed security product. Do not reuse important account passwords as encryption passwords.
+> **Security note:** Android Cipher 2.1 uses password-based AES-256-GCM for new messages. It is a small utility project, not a professionally audited password manager, secure messenger, or substitute for a reviewed security product. Do not reuse important account passwords as encryption passwords.
 
 ## Features
 
@@ -12,7 +12,7 @@ A lightweight, offline-first Android text encryption app built with Java and Mat
 - Versioned, URL-safe Base64 text envelope with authentication.
 - Detects wrong passwords and modified ciphertext.
 - Runs locally; no network permission or account required.
-- Refined Material interface with light/dark themes, edge-to-edge system bars and centered content on wide windows.
+- Refined Material interface with light/dark themes, edge-to-edge system bars, custom launcher icon/splash screen and centered content on wide windows.
 - Paste, copy, share, clear-all, character count and operation progress/feedback.
 - Sensitive clipboard preview marking on Android 13+.
 - Sensitive form fields are excluded from autofill and view-state restoration; the result is read-only and selectable.
@@ -75,7 +75,7 @@ AC2: Base64URL(version || salt || nonce || ciphertext || GCM-tag)
 - Version 1 compatibility: PBKDF2-HMAC-SHA-256 at 210,000 iterations.
 - Associated authenticated data binds the envelope to its format version.
 
-The format version identifies the cryptographic parameters. The app retains version 1 decryption support so existing Android Cipher 2.0 messages remain readable. The 600,000-iteration work factor follows OWASP's current recommendation for PBKDF2-HMAC-SHA-256; actual responsiveness still needs benchmarking on supported physical devices.
+The format version identifies the cryptographic parameters. The app retains version 1 decryption support so existing Android Cipher 2.0 messages remain readable. The 600,000-iteration work factor uses OWASP's current PBKDF2-HMAC-SHA-256 password-storage recommendation as a conservative reference; actual responsiveness still needs benchmarking on supported physical devices.
 
 ## Important migration note
 
