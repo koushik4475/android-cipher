@@ -17,20 +17,23 @@ import javax.crypto.spec.SecretKeySpec;
  * Password-based, authenticated text encryption.
  *
  * Format: AC2:<base64url(version || salt || nonce || ciphertext || GCM tag)>
- * The password is never stored in the encrypted payload.
+ * Version 1 remains readable for backwards compatibility. New messages use
+ * version 2 with a stronger PBKDF2 work factor.
  */
 public final class CryptoManager {
     private static final String PREFIX = "AC2:";
-    private static final byte FORMAT_VERSION = 1;
+    private static final byte LEGACY_FORMAT_VERSION = 1;
+    private static final byte FORMAT_VERSION = 2;
     private static final String KDF_ALGORITHM = "PBKDF2WithHmacSHA256";
     private static final String CIPHER_TRANSFORMATION = "AES/GCM/NoPadding";
     private static final int KEY_LENGTH_BITS = 256;
-    private static final int KDF_ITERATIONS = 210_000;
+    private static final int LEGACY_KDF_ITERATIONS = 210_000;
+    private static final int KDF_ITERATIONS = 600_000;
     private static final int SALT_LENGTH = 16;
     private static final int NONCE_LENGTH = 12;
     private static final int TAG_LENGTH_BITS = 128;
     private static final int MIN_PASSWORD_LENGTH = 12;
-    private static final byte[] AAD = "AndroidCipher|AC2|1".getBytes(StandardCharsets.UTF_8);
+    private static final int MAX_PASSWORD_LENGTH = 1024;
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
@@ -41,9 +44,7 @@ public final class CryptoManager {
         if (plaintext == null || plaintext.isEmpty()) {
             throw new IllegalArgumentException("Enter text to encrypt.");
         }
-        if (password == null || password.length < MIN_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException("Use a password with at least 12 characters.");
-        }
+        validatePassword(password, true);
 
         byte[] salt = new byte[SALT_LENGTH];
         byte[] nonce = new byte[NONCE_LENGTH];
@@ -54,21 +55,23 @@ public final class CryptoManager {
         try {
             SECURE_RANDOM.nextBytes(salt);
             SECURE_RANDOM.nextBytes(nonce);
-            derivedKey = deriveKey(password, salt);
+            derivedKey = deriveKey(password, salt, KDF_ITERATIONS);
 
             Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
             cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(derivedKey, "AES"),
                     new GCMParameterSpec(TAG_LENGTH_BITS, nonce));
-            cipher.updateAAD(AAD);
+            cipher.updateAAD(associatedData(FORMAT_VERSION));
             ciphertext = cipher.doFinal(plaintextBytes);
 
-            ByteBuffer payload = ByteBuffer.allocate(1 + SALT_LENGTH + NONCE_LENGTH + ciphertext.length);
+            ByteBuffer payload = ByteBuffer.allocate(
+                    1 + SALT_LENGTH + NONCE_LENGTH + ciphertext.length);
             payload.put(FORMAT_VERSION);
             payload.put(salt);
             payload.put(nonce);
             payload.put(ciphertext);
 
-            return PREFIX + Base64.getUrlEncoder().withoutPadding().encodeToString(payload.array());
+            return PREFIX + Base64.getUrlEncoder().withoutPadding()
+                    .encodeToString(payload.array());
         } finally {
             Arrays.fill(plaintextBytes, (byte) 0);
             if (derivedKey != null) Arrays.fill(derivedKey, (byte) 0);
@@ -81,15 +84,15 @@ public final class CryptoManager {
     public static String decrypt(String encryptedText, char[] password)
             throws GeneralSecurityException {
         if (encryptedText == null || !encryptedText.startsWith(PREFIX)) {
-            throw new IllegalArgumentException("This is not an Android Cipher 2 encrypted message.");
+            throw new IllegalArgumentException(
+                    "This is not an Android Cipher encrypted message.");
         }
-        if (password == null || password.length == 0) {
-            throw new IllegalArgumentException("Enter the password used for encryption.");
-        }
+        validatePassword(password, false);
 
         final byte[] payload;
         try {
-            payload = Base64.getUrlDecoder().decode(encryptedText.substring(PREFIX.length()).trim());
+            payload = Base64.getUrlDecoder()
+                    .decode(encryptedText.substring(PREFIX.length()).trim());
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException("The encrypted text is malformed.", exception);
         }
@@ -109,8 +112,14 @@ public final class CryptoManager {
         try {
             ByteBuffer buffer = ByteBuffer.wrap(payload);
             byte version = buffer.get();
-            if (version != FORMAT_VERSION) {
-                throw new IllegalArgumentException("This encryption format version is not supported.");
+            final int iterations;
+            if (version == LEGACY_FORMAT_VERSION) {
+                iterations = LEGACY_KDF_ITERATIONS;
+            } else if (version == FORMAT_VERSION) {
+                iterations = KDF_ITERATIONS;
+            } else {
+                throw new IllegalArgumentException(
+                        "This encryption format version is not supported.");
             }
 
             buffer.get(salt);
@@ -118,11 +127,11 @@ public final class CryptoManager {
             ciphertext = new byte[buffer.remaining()];
             buffer.get(ciphertext);
 
-            derivedKey = deriveKey(password, salt);
+            derivedKey = deriveKey(password, salt, iterations);
             Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
             cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(derivedKey, "AES"),
                     new GCMParameterSpec(TAG_LENGTH_BITS, nonce));
-            cipher.updateAAD(AAD);
+            cipher.updateAAD(associatedData(version));
             plaintextBytes = cipher.doFinal(ciphertext);
             return new String(plaintextBytes, StandardCharsets.UTF_8);
         } finally {
@@ -135,9 +144,27 @@ public final class CryptoManager {
         }
     }
 
-    private static byte[] deriveKey(char[] password, byte[] salt)
+    private static void validatePassword(char[] password, boolean forEncryption) {
+        if (password == null || password.length == 0) {
+            throw new IllegalArgumentException("Enter your encryption password.");
+        }
+        if (password.length > MAX_PASSWORD_LENGTH) {
+            throw new IllegalArgumentException("Password must be 1024 characters or fewer.");
+        }
+        if (forEncryption && password.length < MIN_PASSWORD_LENGTH) {
+            throw new IllegalArgumentException(
+                    "Use a password with at least 12 characters.");
+        }
+    }
+
+    private static byte[] associatedData(byte version) {
+        return ("AndroidCipher|AC2|" + version).getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static byte[] deriveKey(char[] password, byte[] salt, int iterations)
             throws GeneralSecurityException {
-        PBEKeySpec keySpec = new PBEKeySpec(password, salt, KDF_ITERATIONS, KEY_LENGTH_BITS);
+        PBEKeySpec keySpec = new PBEKeySpec(
+                password, salt, iterations, KEY_LENGTH_BITS);
         try {
             return SecretKeyFactory.getInstance(KDF_ALGORITHM)
                     .generateSecret(keySpec).getEncoded();

@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.EncryptionDecryption" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.EncryptionDecryption.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryVariant">@color/accent</item>
         <item name="colorOnPrimary">@color/button_text</item>
@@ -13,8 +13,8 @@
         <item name="android:statusBarColor">@color/screen_background</item>
         <item name="android:navigationBarColor">@color/screen_background</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:fontFamily">sans</item>
         <item name="android:windowActionModeOverlay">true</item>
     </style>
+    <style name="Theme.EncryptionDecryption" parent="Theme.EncryptionDecryption.Base" />
 </resources>

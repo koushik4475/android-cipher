@@ -7,4 +7,5 @@
     <color name="security_icon_background">#C8EEE5</color>
     <color name="card_stroke">#DCE5EC</color>
     <color name="text_secondary">#667586</color>
+    <color name="status_error">#B3261E</color>
 </resources>
