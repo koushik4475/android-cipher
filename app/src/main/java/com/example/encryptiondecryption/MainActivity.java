@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private View rootView;
     private TextInputEditText inputText;
     private TextInputEditText passwordInput;
-    private TextInputEditText outputText;
+    private TextView outputText;
     private MaterialButton encryptButton;
     private MaterialButton decryptButton;
     private MaterialButton copyButton;
