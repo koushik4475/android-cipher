@@ -173,8 +173,7 @@
                 android:text="@string/paste"
                 android:textAllCaps="false"
                 android:textColor="@color/accent"
-                app:icon="@drawable/ic_copy"
-                app:iconTint="@color/accent" />
+                android:contentDescription="@string/paste_description" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
@@ -330,6 +329,7 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
                 android:text="@string/status_ready"
+                android:accessibilityLiveRegion="polite"
                 android:textColor="@color/accent"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -351,13 +351,13 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <TextView
                     android:id="@+id/outputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:cursorVisible="false"
                     android:focusable="true"
+                    android:longClickable="true"
                     android:gravity="top|start"
                     android:hint="@string/output_hint"
                     android:inputType="textMultiLine|textNoSuggestions"
@@ -366,8 +366,7 @@
                     android:textColor="?attr/colorOnSurface"
                     android:textColorHint="@color/text_secondary"
                     android:textIsSelectable="true"
-                    android:textSize="14sp"
-                    android:importantForAutofill="no" />
+                    android:textSize="14sp" />
 
                 <View
                     android:layout_width="match_parent"
