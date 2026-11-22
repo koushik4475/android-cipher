@@ -15,7 +15,7 @@ A lightweight, offline-first Android text encryption app built with Java and Mat
 - Refined Material interface with light/dark themes, edge-to-edge system bars, custom launcher icon/splash screen and centered content on wide windows.
 - Paste, copy, share, clear-all, character count and operation progress/feedback.
 - Sensitive clipboard preview marking on Android 13+.
-- Sensitive form fields are excluded from autofill and view-state restoration; the result is read-only and selectable.
+- Sensitive form fields are excluded from autofill and view-state restoration; the result is read-only; copying and sharing use explicit actions.
 - Automated tests for Unicode, randomness, tampering, invalid input and old-format compatibility.
 
 ## Compatibility
