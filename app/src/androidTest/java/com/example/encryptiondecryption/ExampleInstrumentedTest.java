@@ -1,8 +1,6 @@
 package com.example.encryptiondecryption;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -33,8 +31,8 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void characterCounterCountsUnicodeCodePoints() {
-        onView(withId(R.id.inputText))
-                .perform(typeText("Hi 🔐"), closeSoftKeyboard());
+        activityRule.getScenario().onActivity(activity ->
+                activity.findViewById(R.id.inputText).setText("Hi 🔐"));
         onView(withId(R.id.inputCount)).check(matches(withText("4 characters")));
     }
 }
