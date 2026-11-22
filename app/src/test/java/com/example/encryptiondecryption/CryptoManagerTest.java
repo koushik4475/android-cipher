@@ -92,6 +92,49 @@ public class CryptoManagerTest {
         CryptoManager.decrypt("AC2:" + "A".repeat(1_500_000), PASSWORD);
     }
 
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectsAuthenticatedPayloadWithMalformedUtf8() throws Exception {
+        CryptoManager.decrypt(createVersionTwoMessage(new byte[] {(byte) 0xC3, 0x28}),
+                PASSWORD);
+    }
+
+    private static String createVersionTwoMessage(byte[] plaintext) throws Exception {
+        byte[] salt = new byte[16];
+        byte[] nonce = new byte[12];
+        java.util.Arrays.fill(salt, (byte) 0x33);
+        java.util.Arrays.fill(nonce, (byte) 0x44);
+
+        PBEKeySpec keySpec = new PBEKeySpec(PASSWORD, salt, 600_000, 256);
+        byte[] key;
+        try {
+            key = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
+                    .generateSecret(keySpec).getEncoded();
+        } finally {
+            keySpec.clearPassword();
+        }
+
+        byte[] ciphertext;
+        try {
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"),
+                    new GCMParameterSpec(128, nonce));
+            cipher.updateAAD("AndroidCipher|AC2|2".getBytes(StandardCharsets.UTF_8));
+            ciphertext = cipher.doFinal(plaintext);
+        } finally {
+            java.util.Arrays.fill(key, (byte) 0);
+        }
+
+        ByteBuffer payload = ByteBuffer.allocate(1 + salt.length + nonce.length
+                + ciphertext.length);
+        payload.put((byte) 2);
+        payload.put(salt);
+        payload.put(nonce);
+        payload.put(ciphertext);
+        return "AC2:" + Base64.getUrlEncoder().withoutPadding()
+                .encodeToString(payload.array());
+    }
+
     private static String createLegacyVersionOneMessage(String plaintext)
             throws Exception {
         byte[] salt = new byte[16];
