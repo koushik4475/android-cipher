@@ -41,8 +41,8 @@ jobs:
         with:
           packages: platform-tools
 
-      - name: Install Android 36 SDK
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Install Android 37 SDK
+        run: sdkmanager "platforms;android-37" "build-tools;36.0.0"
 
       - name: Check release signing credentials
         id: signing
