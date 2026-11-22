@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">CIPHER BY 21SECD10-11</string>
+    <string name="app_name">Android Cipher</string>
+    <string name="brand_eyebrow">PRIVATE BY DESIGN</string>
+    <string name="home_title">Android Cipher</string>
+    <string name="home_subtitle">Encrypt and decrypt text locally. Your password never leaves this device.</string>
+    <string name="security_title">Authenticated encryption</string>
+    <string name="security_subtitle">AES-256-GCM · Random salt and nonce · Offline</string>
+    <string name="section_message">Your message</string>
+    <string name="input_hint">Type or paste text here</string>
+    <string name="password_hint">Encryption password</string>
+    <string name="password_helper">Use 12 or more characters. Keep it safe — it cannot be recovered.</string>
+    <string name="encrypt">Encrypt</string>
+    <string name="decrypt">Decrypt</string>
+    <string name="output_title">Result</string>
+    <string name="output_hint">Your encrypted or decrypted result will appear here.</string>
+    <string name="copy_output">Copy result</string>
+    <string name="clear">Clear</string>
+    <string name="privacy_note">Encryption runs on your device. Android Cipher does not upload your messages or passwords.</string>
+    <string name="footer">ANDROID CIPHER 2.0 · OFFLINE TEXT ENCRYPTION</string>
+    <string name="status_ready">READY</string>
+    <string name="status_encrypting">ENCRYPTING…</string>
+    <string name="status_decrypting">DECRYPTING…</string>
+    <string name="status_encrypted">ENCRYPTED</string>
+    <string name="status_decrypted">DECRYPTED</string>
 </resources>
