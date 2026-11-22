@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ClipDescription;
 import android.os.Build;
+import android.os.PersistableBundle;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -219,7 +220,9 @@ public class MainActivity extends AppCompatActivity {
         }
         inputText.setText(clip);
         inputText.setSelection(inputText.length());
-        showMessage(getString(R.string.message_pasted));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            showMessage(getString(R.string.message_pasted));
+        }
     }
 
     private void copyOutput() {
@@ -236,12 +239,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         ClipData clip = ClipData.newPlainText(getString(R.string.clip_label), value);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            clip.getDescription().getExtras().putBoolean(
-                    ClipDescription.EXTRA_IS_SENSITIVE, true);
-        }
+        PersistableBundle clipboardExtras = new PersistableBundle();
+        String sensitiveFlag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? ClipDescription.EXTRA_IS_SENSITIVE : "android.content.extra.IS_SENSITIVE";
+        clipboardExtras.putBoolean(sensitiveFlag, true);
+        clip.getDescription().setExtras(clipboardExtras);
         clipboard.setPrimaryClip(clip);
-        showMessage(getString(R.string.message_copied));
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            showMessage(getString(R.string.message_copied));
+        }
     }
 
     private void shareOutput() {
