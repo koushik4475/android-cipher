@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.splashscreen.SplashScreen;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        WindowCompat.enableEdgeToEdge(getWindow());
         setContentView(R.layout.activity_main);
 
         rootView = findViewById(R.id.rootView);
@@ -89,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         controller.setAppearanceLightNavigationBars(!dark);
 
         ViewCompat.setOnApplyWindowInsetsListener(rootView, (view, windowInsets) -> {
-            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    | WindowInsetsCompat.Type.displayCutout());
             Insets ime = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
             view.setPadding(view.getPaddingLeft(), bars.top, view.getPaddingRight(),
                     Math.max(bars.bottom, ime.bottom) + 12);
@@ -166,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
         char[] passwordChars = new char[passwordLength];
         passwordEditable.getChars(0, passwordLength, passwordChars, 0);
+        passwordInput.setText("");
         outputText.setText("");
         copyButton.setEnabled(false);
         shareButton.setEnabled(false);
@@ -277,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void clearFields() {
         if (processing) return;
+        clearAppClipboardIfOwned();
         inputText.setText("");
         passwordInput.setText("");
         outputText.setText("");
@@ -290,8 +295,27 @@ public class MainActivity extends AppCompatActivity {
         showMessage(getString(R.string.message_cleared));
     }
 
+    private void clearAppClipboardIfOwned() {
+        ClipboardManager clipboard =
+                (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard == null || !clipboard.hasPrimaryClip()) return;
+
+        ClipDescription description = clipboard.getPrimaryClipDescription();
+        if (description == null
+                || !getString(R.string.clip_label).contentEquals(description.getLabel())) {
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            clipboard.clearPrimaryClip();
+        } else {
+            clipboard.setPrimaryClip(ClipData.newPlainText("", ""));
+        }
+    }
+
     private void updateCharacterCount() {
-        int count = inputText.getText() == null ? 0 : inputText.getText().length();
+        CharSequence text = inputText.getText();
+        int count = text == null ? 0 : Character.codePointCount(text, 0, text.length());
         inputCount.setText(getString(R.string.character_count, count));
     }
 
