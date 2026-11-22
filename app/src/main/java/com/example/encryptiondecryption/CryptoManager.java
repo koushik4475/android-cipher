@@ -2,6 +2,8 @@ package com.example.encryptiondecryption;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -163,7 +165,16 @@ public final class CryptoManager {
             if (plaintextBytes.length > MAX_TEXT_BYTES) {
                 throw new IllegalArgumentException("Decrypted text exceeds the 1 MiB message limit.");
             }
-            return new String(plaintextBytes, StandardCharsets.UTF_8);
+            try {
+                return StandardCharsets.UTF_8.newDecoder()
+                        .onMalformedInput(CodingErrorAction.REPORT)
+                        .onUnmappableCharacter(CodingErrorAction.REPORT)
+                        .decode(ByteBuffer.wrap(plaintextBytes))
+                        .toString();
+            } catch (CharacterCodingException exception) {
+                throw new IllegalArgumentException(
+                        "Decrypted content is not valid UTF-8 text.", exception);
+            }
         } finally {
             Arrays.fill(payload, (byte) 0);
             Arrays.fill(salt, (byte) 0);
