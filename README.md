@@ -5,7 +5,7 @@
 Android Cipher is an Android application that demonstrates text encryption and decryption with the Blowfish cryptographic algorithm. The project is a learning-oriented example of building a native Android interface around cryptographic operations, with screenshots, architecture notes, and Android Studio setup instructions. Blowfish has a 64-bit block size and is a legacy cipher; do not use this demo to protect new sensitive data or as a substitute for a modern, reviewed security design.
 
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=00D9FF&center=true&vCenter=true&width=940&lines=Military-Grade+Encryption+for+Android;8-Level+Blowfish+Security+System;Encrypt+Text+%26+Passwords+Securely" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=2800&pause=2000&color=00D9FF&center=true&vCenter=true&width=940&lines=Legacy+Blowfish+Demo;Explore+Encryption+%26+Decryption;Android+Java+Learning+Project" alt="Typing SVG" />
 
 [![Made with Love](https://img.shields.io/badge/Made%20with-❤️-red.svg)](https://github.com/koushik4475)
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://www.android.com/)
@@ -19,16 +19,20 @@ Android Cipher is an Android application that demonstrates text encryption and d
 
 ---
 
+## Security limitations (read before use)
+
+This repository is an educational demo, **not a secure storage or messaging tool**. Its implementation uses Blowfish-CBC with a hard-coded key and fixed IV, and CBC does not authenticate ciphertext. These choices make it unsuitable for protecting real credentials, personal data, or other sensitive information. The historical claims of an '8-level' system or 'military-grade' security are not supported by the current implementation. For real applications, use a modern authenticated-encryption scheme (such as AES-GCM) with securely managed keys and unique nonces, ideally via Android Keystore, and obtain a security review.
+
 ## 🌟 Project Overview
 
-**Android Cipher** is a cutting-edge encryption application developed as a mini project at **University of Mysore, School of Engineering**. This powerful tool implements an **8-level cascading encryption system** using the robust **Blowfish algorithm**, providing legacy-cipher demonstration for your sensitive text and passwords.
+**Android Cipher** is a learning-oriented encryption application developed as a mini project at **University of Mysore, School of Engineering**. This demo shows text encryption and decryption using the legacy **Blowfish** algorithm; it is not designed to protect sensitive data.
 
 <div align="center">
 
 ```ascii
 ╔════════════════════════════════════════╗
 ║    🔒 → 🔐 → 🛡️ → 🔑 → 💎 → 🚀 → ⚡ → 🌟    ║
-║         8 LEVELS OF ENCRYPTION         ║
+║       LEGACY CIPHER DEMONSTRATION       ║
 ╚════════════════════════════════════════╝
 ```
 
@@ -43,10 +47,10 @@ Android Cipher is an Android application that demonstrates text encryption and d
 <td width="50%">
 
 ### 🔐 Core Capabilities
-- **8-Level Encryption Cascade** - Multiple layers of security
-- **Blowfish Algorithm** - Industry-standard encryption
+- **Encryption demonstration** - Educational legacy-cipher example
+- **Blowfish CBC** - Legacy algorithm implementation
 - **Text Encryption** - Secure your messages
-- **Password Protection** - Safeguard credentials
+- **Text transformation** - Demonstrate encrypt/decrypt flows
 - **Easy Decryption** - Simple one-tap restore
 - **Offline Security** - No internet required
 
@@ -75,7 +79,7 @@ Android Cipher is an Android application that demonstrates text encryption and d
 
 <img width="300" alt="Encrypting Text Screenshot" src="https://github.com/user-attachments/assets/26a2a8f7-e141-4e70-bf2f-72cd03ff1e7e" />
 
-> *Transform plain text into an unbreakable cipher with a single tap*
+> *Transform text using this educational legacy cipher demo*
 
 ---
 
