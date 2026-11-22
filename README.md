@@ -23,9 +23,9 @@ A lightweight, offline-first Android text encryption app built with Java and Mat
 - Android Studio with Android Gradle Plugin 9.5.2.
 - JDK 17.
 - Gradle 9.9.1 (wrapper).
-- Android SDK 36.
+- Android SDK Platform 37 for compilation (Android 17 SDK).
 - Minimum Android version: API 26 (Android 8.0).
-- Target SDK: API 36 (Android 16).
+- Target SDK: API 36 (Android 16), matching the current Google Play submission requirement.
 - Java source compatibility: Java 17.
 
 ## Build and test
