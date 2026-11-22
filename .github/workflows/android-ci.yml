@@ -39,8 +39,8 @@ jobs:
         with:
           packages: platform-tools
 
-      - name: Install Android 36 SDK
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Install Android 37 SDK
+        run: sdkmanager "platforms;android-37" "build-tools;36.0.0"
 
       - name: Run unit tests, lint and assemble installable build variants
         run: bash gradlew --no-daemon clean testDebugUnitTest lintDebug assembleDebug assembleRelease bundleRelease
