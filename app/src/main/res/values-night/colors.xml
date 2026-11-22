@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="screen_background">#0B1220</color>
+    <color name="accent">#55D6BE</color>
+    <color name="button_text">#06231F</color>
+    <color name="security_card">#142B32</color>
+    <color name="security_icon_background">#1C4548</color>
+    <color name="card_stroke">#25364A</color>
+    <color name="text_secondary">#A5B4C5</color>
+</resources>
