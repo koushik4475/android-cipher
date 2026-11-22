@@ -125,6 +125,12 @@ public class MainActivity extends AppCompatActivity {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateCharacterCount();
+                if (!processing) {
+                    outputText.setText("");
+                    copyButton.setEnabled(false);
+                    shareButton.setEnabled(false);
+                    statusText.setText(R.string.status_ready);
+                }
             }
             @Override public void afterTextChanged(Editable editable) { }
         });
@@ -159,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
 
         char[] passwordChars = new char[passwordLength];
         passwordEditable.getChars(0, passwordLength, passwordChars, 0);
+        outputText.setText("");
+        copyButton.setEnabled(false);
+        shareButton.setEnabled(false);
         setProcessing(true);
         statusText.setText(encrypt ? R.string.status_encrypting : R.string.status_decrypting);
         hideKeyboard();
@@ -184,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IllegalArgumentException exception) {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
-                    statusText.setText(R.string.status_ready);
+                    statusText.setText(R.string.status_error);
                     setProcessing(false);
                     showMessage(exception.getMessage() == null
                             ? getString(R.string.error_generic) : exception.getMessage());
@@ -192,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (GeneralSecurityException exception) {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
-                    statusText.setText(R.string.status_ready);
+                    statusText.setText(R.string.status_error);
                     setProcessing(false);
                     showMessage(encrypt
                             ? getString(R.string.error_encrypt)
@@ -284,6 +293,8 @@ public class MainActivity extends AppCompatActivity {
     private void setProcessing(boolean value) {
         processing = value;
         processingIndicator.setVisibility(value ? View.VISIBLE : View.GONE);
+        inputText.setEnabled(!value);
+        passwordInput.setEnabled(!value);
         encryptButton.setEnabled(!value);
         decryptButton.setEnabled(!value);
         pasteButton.setEnabled(!value);
